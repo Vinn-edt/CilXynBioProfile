@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaera Community's — CilXyn</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#c9a84c;--gold-light:#f0d080;--gold-dark:#8a6a1a;
+  --red:#8b1a1a;--red-bright:#c0392b;
+  --bg:#050505;--bg2:#0d0a06;--bg3:#110d07;
+  --text:#e8d8b0;--text-dim:#9a8060;
+  --orange:#e87c1e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Text',serif;min-height:100vh;overflow-x:hidden;}
+
+.bg-layer{position:fixed;inset:0;z-index:0;background-image:none;background-size:cover;background-position:center;filter:brightness(0.18) saturate(0.6);}
+.bg-overlay{position:fixed;inset:0;z-index:1;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(139,26,26,.15) 0%,transparent 70%),radial-gradient(ellipse 80% 60% at 50% 100%,rgba(201,168,76,.08) 0%,transparent 70%),linear-gradient(180deg,rgba(5,5,5,.7) 0%,rgba(13,10,6,.5) 50%,rgba(5,5,5,.8) 100%);}
+.noise{position:fixed;inset:0;z-index:2;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:rgba(5,5,5,.92);border-bottom:1px solid rgba(201,168,76,.15);backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 16px;gap:12px;}
+.hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border-radius:4px;transition:background .2s;}
+.hamburger:hover{background:rgba(201,168,76,.1);}
+.hamburger span{display:block;width:22px;height:2px;background:var(--gold);border-radius:2px;transition:all .3s;}
+.topbar-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);flex:1;text-align:center;}
+.topbar-actions{display:flex;align-items:center;gap:8px;}
+.cs-btn{display:flex;align-items:center;gap:6px;background:rgba(232,124,30,.12);border:1px solid rgba(232,124,30,.35);border-radius:999px;padding:5px 12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:var(--orange);cursor:pointer;transition:all .25s;white-space:nowrap;}
+.cs-btn:hover{background:rgba(232,124,30,.22);border-color:rgba(232,124,30,.6);}
+.login-btn{display:flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:999px;padding:5px 12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:var(--gold);cursor:pointer;transition:all .25s;white-space:nowrap;}
+.login-btn:hover{background:rgba(201,168,76,.2);}
+.user-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.user-name-small{font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:1px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;left:-300px;bottom:0;width:280px;z-index:201;background:linear-gradient(160deg,#0d0a06,#110d07);border-right:1px solid rgba(201,168,76,.2);transition:left .35s cubic-bezier(.4,0,.2,1);padding:0;overflow-y:auto;}
+.drawer.open{left:0;}
+.drawer-header{padding:20px 20px 16px;border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:center;gap:12px;}
+.drawer-header-icon{font-size:1.5rem;}
+.drawer-header-title{font-family:'Cinzel Decorative',serif;font-size:14px;color:var(--gold-light);}
+.drawer-section{padding:16px 20px 8px;}
+.drawer-section-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:10px;}
+.drawer-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;transition:background .2s;margin-bottom:4px;text-decoration:none;color:var(--text);}
+.drawer-item:hover{background:rgba(201,168,76,.08);}
+.drawer-item-icon{width:32px;height:32px;border-radius:50%;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.drawer-item-text{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;}
+.drawer-item-sub{font-size:10px;color:var(--text-dim);font-style:italic;font-family:'Crimson Text',serif;}
+.drawer-divider{height:1px;background:rgba(201,168,76,.1);margin:8px 20px;}
+.drawer-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gold);font-size:14px;}
+
+.wrapper{position:relative;z-index:5;max-width:720px;margin:0 auto;padding:72px 20px 80px;}
+
+.skull-deco{text-align:center;font-size:2rem;letter-spacing:12px;color:var(--gold-dark);margin-bottom:8px;opacity:.5;animation:sway 4s ease-in-out infinite;}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 24px 40px;position:relative;}
+.profile-frame{position:relative;width:min(200px,52vw);height:min(200px,52vw);margin-bottom:28px;}
+.profile-frame::before,.profile-frame::after{content:'';position:absolute;border-radius:50%;}
+.profile-frame::before{inset:-14px;border:2px solid transparent;border-top-color:var(--gold);border-right-color:var(--gold);animation:spin 8s linear infinite;}
+.profile-frame::after{inset:-24px;border:1px dashed var(--gold-dark);animation:spin 12s linear infinite reverse;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.profile-img{width:min(200px,52vw);height:min(200px,52vw);border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 30px rgba(201,168,76,.4),0 0 60px rgba(201,168,76,.15);background:#1a1206;}
+.compass-points{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;}
+.cp{position:absolute;font-size:10px;color:var(--gold);font-family:'Cinzel',serif;font-weight:700;}
+.cp.n{top:-36px;left:50%;transform:translateX(-50%)}
+.cp.s{bottom:-36px;left:50%;transform:translateX(-50%)}
+.cp.e{right:-36px;top:50%;transform:translateY(-50%)}
+.cp.w{left:-36px;top:50%;transform:translateY(-50%)}
+.hero-tag{font-family:'Cinzel',serif;font-size:11px;letter-spacing:4px;color:var(--gold-dark);text-transform:uppercase;margin-bottom:8px;}
+.hero-name{font-family:'Cinzel Decorative',serif;font-size:clamp(2rem,8vw,3.2rem);font-weight:900;color:var(--gold-light);text-shadow:0 2px 4px rgba(0,0,0,.8);letter-spacing:2px;line-height:1.1;margin-bottom:6px;}
+
+.hero-subtitle{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:3px;margin-bottom:4px;}
+.hero-handle{font-family:'Crimson Text',serif;font-style:italic;font-size:1.1rem;color:var(--text-dim);margin-bottom:20px;}
+.status-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:999px;padding:5px 16px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold-light);margin-bottom:28px;transition:all .4s ease;}
+.status-badge.closed{background:rgba(232,220,180,.1);border-color:rgba(232,220,180,.35);color:#e8dcb4;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold);animation:pulse 1.5s ease-in-out infinite;}
+.status-dot.open{background:var(--gold);box-shadow:0 0 8px var(--gold-light);}
+.status-dot.closed{background:#e8dcb4;box-shadow:0 0 6px rgba(232,220,180,.6);}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.divider{display:flex;align-items:center;gap:12px;margin:28px 0;width:100%;}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent);}
+.divider-icon{color:var(--gold);font-size:1.2rem;opacity:.7;}
+
+.section-card{background:linear-gradient(135deg,rgba(17,13,7,.92),rgba(13,10,6,.95));border:1px solid rgba(201,168,76,.2);border-radius:4px;margin-bottom:20px;overflow:hidden;position:relative;transition:border-color .3s,box-shadow .3s;}
+.section-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.04),transparent);pointer-events:none;}
+.section-card:hover{border-color:rgba(201,168,76,.45);box-shadow:0 0 24px rgba(201,168,76,.08),0 8px 32px rgba(0,0,0,.5);}
+.section-card .corner{position:absolute;width:16px;height:16px;border-color:var(--gold-dark);border-style:solid;opacity:.6;}
+.section-card .corner.tl{top:6px;left:6px;border-width:2px 0 0 2px;}
+.section-card .corner.tr{top:6px;right:6px;border-width:2px 2px 0 0;}
+.section-card .corner.bl{bottom:6px;left:6px;border-width:0 0 2px 2px;}
+.section-card .corner.br{bottom:6px;right:6px;border-width:0 2px 2px 0;}
+.section-header{padding:16px 24px 12px;border-bottom:1px solid rgba(201,168,76,.15);display:flex;align-items:center;gap:10px;}
+.section-header-icon{font-size:1.3rem;color:var(--gold);}
+.section-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600;}
+.section-body{padding:20px 24px;}
+
+.link-btn{display:flex;align-items:center;gap:14px;padding:14px 18px;margin-bottom:10px;background:rgba(5,5,5,.6);border:1px solid rgba(201,168,76,.15);border-radius:3px;text-decoration:none;color:var(--text);transition:all .3s ease;position:relative;overflow:hidden;cursor:pointer;}
+.link-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transition:transform .3s ease;transform-origin:bottom;}
+.link-btn:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.4);transform:translateX(4px);box-shadow:-4px 0 20px rgba(201,168,76,.1);color:var(--gold-light);}
+.link-btn:hover::before{transform:scaleY(1);}
+.link-icon{width:40px;height:40px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;transition:background .3s;}
+.link-btn:hover .link-icon{background:rgba(201,168,76,.2);}
+.link-info{flex:1;}
+.link-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:1px;margin-bottom:2px;transition:color .3s;}
+.link-desc{font-size:12px;color:var(--text-dim);font-style:italic;}
+.link-arrow{color:var(--gold-dark);font-size:1rem;transition:transform .3s,color .3s;}
+.link-btn:hover .link-arrow{transform:translateX(4px);color:var(--gold);}
+.link-btn.discord:hover{border-color:rgba(88,101,242,.5);background:rgba(88,101,242,.07);}
+.link-btn.tiktok:hover{border-color:rgba(255,0,80,.4);background:rgba(255,0,80,.05);}
+.link-btn.whatsapp:hover{border-color:rgba(37,211,102,.4);background:rgba(37,211,102,.05);}
+.link-btn.saweria:hover{border-color:rgba(255,160,50,.4);background:rgba(255,160,50,.05);}
+
+.about-text{font-size:1.05rem;line-height:1.9;color:var(--text-dim);font-style:italic;text-align:center;padding:4px 0;}
+.about-text strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:.9rem;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,.1);border-radius:3px;overflow:hidden;margin-top:16px;}
+.stat-item{background:rgba(13,10,6,.9);padding:16px 8px;text-align:center;}
+.stat-number{font-family:'Cinzel',serif;font-size:1.8rem;color:var(--gold-light);display:block;margin-bottom:4px;line-height:1;}
+.stat-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;}
+.tags-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.tag{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:2px;padding:4px 12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold-dark);text-transform:uppercase;}
+
+.jasa-card{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(13,10,6,.95));border:1px solid rgba(201,168,76,.3);}
+.jasa-card .section-title{color:var(--gold-light);}
+.jasa-card .section-header-icon{color:var(--gold);}
+.jasa-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:999px;padding:4px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold-light);margin-bottom:14px;transition:all .4s ease;}
+.jasa-badge.closed{background:rgba(232,220,180,.08);border-color:rgba(232,220,180,.3);color:#e8dcb4;}
+.jasa-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.jasa-list li{display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--text-dim);font-style:italic;}
+.jasa-list li::before{content:'⚓';font-size:.8rem;color:var(--gold-dark);}
+.jasa-note{margin-top:14px;padding:10px 14px;background:rgba(201,168,76,.05);border-left:2px solid var(--gold-dark);font-size:.9rem;color:var(--text-dim);font-style:italic;}
+
+.footer{text-align:center;padding:32px 0 8px;}
+.footer-emblem{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold-dark);opacity:.4;margin-bottom:12px;letter-spacing:4px;}
+.footer-text{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text-dim);opacity:.5;text-transform:uppercase;}
+.footer-copy{margin-top:6px;font-size:11px;color:var(--text-dim);opacity:.35;font-style:italic;}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fadeInUp .7s ease forwards;}
+.delay-1{animation-delay:.1s;opacity:0}
+.delay-2{animation-delay:.2s;opacity:0}
+.delay-3{animation-delay:.3s;opacity:0}
+.delay-4{animation-delay:.4s;opacity:0}
+.delay-5{animation-delay:.5s;opacity:0}
+.delay-6{animation-delay:.6s;opacity:0}
+.delay-7{animation-delay:.7s;opacity:0}
+
+/* ── PAYMENT SECTION ── */
+.payment-trigger-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:18px 20px;background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(139,26,26,.08));border:2px solid rgba(201,168,76,.4);border-radius:4px;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden;margin-bottom:14px;}
+.payment-trigger-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.06),transparent);pointer-events:none;}
+.payment-trigger-btn:hover{border-color:rgba(201,168,76,.75);background:linear-gradient(135deg,rgba(201,168,76,.2),rgba(139,26,26,.12));box-shadow:0 0 32px rgba(201,168,76,.15);}
+.payment-trigger-icon{font-size:1.8rem;}
+.payment-trigger-text{font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold-light);font-weight:700;}
+.payment-trigger-sub{font-family:'Crimson Text',serif;font-size:11px;color:var(--text-dim);font-style:italic;letter-spacing:1px;}
+
+.payment-modal-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.95);display:none;flex-direction:column;align-items:stretch;justify-content:flex-start;}
+.payment-modal-overlay.open{display:flex;}
+.payment-modal-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:16px 16px 8px;}
+.payment-modal-inner{position:relative;width:100%;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;}
+.payment-close-bar{flex-shrink:0;position:sticky;bottom:0;left:0;right:0;z-index:700;padding:12px 16px;background:linear-gradient(0deg,rgba(5,5,5,.98) 80%,transparent);display:flex;align-items:center;justify-content:center;}
+.payment-close-bar-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,rgba(139,26,26,.25),rgba(201,168,76,.12));border:1px solid rgba(201,168,76,.45);border-radius:8px;padding:14px 40px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold-light);cursor:pointer;width:100%;max-width:500px;transition:all .25s;box-shadow:0 -4px 24px rgba(0,0,0,.6);}
+.payment-close-bar-btn:hover{background:linear-gradient(135deg,rgba(139,26,26,.4),rgba(201,168,76,.22));border-color:rgba(201,168,76,.75);box-shadow:0 -4px 32px rgba(201,168,76,.12);}
+.payment-img-frame{position:relative;width:100%;aspect-ratio:864/1536;border-radius:6px;overflow:hidden;border:2px solid rgba(201,168,76,.4);box-shadow:0 0 60px rgba(201,168,76,.15),0 0 120px rgba(201,168,76,.05);}
+.payment-img-frame::before,.payment-img-frame::after{content:'';position:absolute;z-index:2;pointer-events:none;}
+.payment-img-frame::before{inset:0;border:12px solid transparent;background:linear-gradient(135deg,rgba(201,168,76,.15),transparent 40%,transparent 60%,rgba(201,168,76,.1)) border-box;}
+.payment-corner-deco{position:absolute;z-index:3;font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:2px;pointer-events:none;}
+.payment-corner-deco.tl{top:8px;left:12px;}
+.payment-corner-deco.tr{top:8px;right:12px;}
+.payment-corner-deco.bl{bottom:8px;left:12px;}
+.payment-corner-deco.br{bottom:8px;right:12px;}
+.payment-img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;}
+.payment-info-row{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:16px;}
+.payment-info-card{background:linear-gradient(135deg,rgba(17,13,7,.96),rgba(13,10,6,.98));border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;overflow:hidden;}
+.payment-info-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-dark));}
+.payment-info-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px;}
+.payment-info-value{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-light);letter-spacing:1px;font-weight:700;}
+.payment-copy-btn{display:flex;align-items:center;gap:6px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);border-radius:999px;padding:6px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:var(--gold);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.payment-copy-btn:hover{background:rgba(201,168,76,.25);border-color:rgba(201,168,76,.6);}
+.payment-copy-btn.copied{background:rgba(37,211,102,.12);border-color:rgba(37,211,102,.4);color:#4ade80;}
+
+.payment-download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.08));border:1px solid rgba(201,168,76,.45);border-radius:4px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold-light);cursor:pointer;transition:all .25s;}
+.payment-download-btn:hover{background:linear-gradient(135deg,rgba(201,168,76,.28),rgba(201,168,76,.15));border-color:rgba(201,168,76,.75);box-shadow:0 0 20px rgba(201,168,76,.12);}
+.payment-tips-card{background:rgba(139,26,26,.12);border:1px solid rgba(201,168,76,.2);border-left:3px solid var(--gold-dark);border-radius:4px;padding:14px 16px;}
+.payment-tips-header{display:flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;}
+.payment-tips-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.payment-tips-list li{font-size:.85rem;color:var(--text-dim);line-height:1.7;font-style:italic;}
+.payment-tips-list li strong{color:var(--gold);font-style:normal;font-family:'Cinzel',serif;font-size:.8rem;}
+
+.payment-banner{text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text-dim);margin-top:16px;opacity:.5;text-transform:uppercase;}
+
+.drawer-auth{display:flex;flex-direction:column;gap:8px;padding:12px;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.15);border-radius:4px;}
+.drawer-auth-user{display:flex;align-items:center;gap:10px;}
+.drawer-auth-name{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;color:var(--gold);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.drawer-login-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#3c4043;border:none;border-radius:4px;padding:9px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:Roboto,Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.2);width:100%;transition:box-shadow .2s;}
+.drawer-login-btn:hover{box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.drawer-logout-btn{background:rgba(139,26,26,.15);border:1px solid rgba(192,57,43,.3);border-radius:4px;padding:6px 12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;color:#e07070;cursor:pointer;width:100%;transition:all .2s;text-align:center;}
+.drawer-logout-btn:hover{background:rgba(139,26,26,.28);}
+@keyframes glimmer{0%,100%{text-shadow:0 0 60px rgba(201,168,76,.5),0 0 120px rgba(201,168,76,.2)}50%{text-shadow:0 0 80px rgba(201,168,76,.8),0 0 160px rgba(201,168,76,.4)}}
+::-webkit-scrollbar{display:none}
+*{scrollbar-width:none;-ms-overflow-style:none;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.cs-modal{background:linear-gradient(160deg,#0d0a06,#110d07);border:1px solid rgba(201,168,76,.25);border-radius:6px;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;position:relative;animation:fadeInUp .3s ease;}
+.cs-modal-header{padding:16px 20px;border-bottom:1px solid rgba(201,168,76,.15);display:flex;align-items:center;gap:10px;}
+.cs-modal-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);flex:1;}
+.cs-modal-close{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);cursor:pointer;color:var(--gold);font-size:14px;display:flex;align-items:center;justify-content:center;}
+.cs-login-prompt{padding:32px 24px;text-align:center;}
+.cs-login-prompt p{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin-bottom:20px;line-height:1.8;}
+.cs-login-prompt .g-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#333;border:none;border-radius:4px;padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:box-shadow .2s;}
+.cs-login-prompt .g-btn:hover{box-shadow:0 2px 12px rgba(0,0,0,.3);}
+.cs-chat-area{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:380px;}
+.msg{display:flex;flex-direction:column;max-width:80%;}
+.msg.me{align-self:flex-end;align-items:flex-end;}
+.msg.other{align-self:flex-start;align-items:flex-start;}
+.msg.bot{align-self:flex-start;align-items:flex-start;}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:.9rem;line-height:1.5;}
+.msg.me .msg-bubble{background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.3);color:var(--text);border-radius:12px 12px 2px 12px;}
+.msg.other .msg-bubble{background:rgba(88,101,242,.18);border:1px solid rgba(88,101,242,.3);color:var(--text);border-radius:12px 12px 12px 2px;}
+.msg.bot .msg-bubble{background:rgba(232,124,30,.12);border:1px solid rgba(232,124,30,.3);color:#f0c080;border-radius:12px 12px 12px 2px;}
+.msg-meta{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:var(--text-dim);margin-top:3px;}
+.msg-sender{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;color:var(--gold);margin-bottom:3px;}
+.msg.bot .msg-sender{color:var(--orange);}
+.cs-input-area{padding:12px 16px;border-top:1px solid rgba(201,168,76,.1);display:flex;gap:8px;align-items:flex-end;}
+.cs-input{flex:1;background:rgba(5,5,5,.7);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:10px 14px;color:var(--text);font-family:'Crimson Text',serif;font-size:.95rem;resize:none;outline:none;min-height:40px;max-height:100px;transition:border-color .2s;}
+.cs-input:focus{border-color:rgba(201,168,76,.45);}
+.cs-send{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:8px 14px;color:var(--gold);cursor:pointer;font-size:1rem;transition:all .2s;flex-shrink:0;}
+.cs-send:hover{background:rgba(201,168,76,.28);}
+.cs-send:disabled{opacity:.35;cursor:not-allowed;}
+.cs-locked-notice{padding:10px 16px;background:rgba(139,26,26,.15);border-top:1px solid rgba(192,57,43,.2);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:#e07070;text-align:center;}
+.dev-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(232,124,30,.15);border:1px solid rgba(232,124,30,.4);border-radius:999px;padding:3px 10px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--orange);}
+.g-topbar-btn{display:flex;align-items:center;gap:6px;background:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:500;color:#333;cursor:pointer;transition:box-shadow .2s;}
+.g-topbar-btn:hover{box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.cs-tabs{display:flex;border-bottom:1px solid rgba(201,168,76,.12);}
+.cs-tab{flex:1;padding:10px;text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.cs-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.cs-requests-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;max-height:380px;}
+.req-item{background:rgba(5,5,5,.6);border:1px solid rgba(201,168,76,.15);border-radius:4px;padding:12px 14px;cursor:pointer;transition:all .2s;}
+.req-item:hover{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.05);}
+.req-item.approved{border-color:rgba(37,211,102,.3);}
+.req-item-header{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.req-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid rgba(201,168,76,.3);}
+.req-name{font-family:'Cinzel',serif;font-size:10px;color:var(--gold);flex:1;}
+.req-status{font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:2px 8px;border-radius:999px;}
+.req-status.pending{background:rgba(232,124,30,.15);color:var(--orange);border:1px solid rgba(232,124,30,.3);}
+.req-status.approved{background:rgba(37,211,102,.12);color:#4ade80;border:1px solid rgba(37,211,102,.3);}
+.req-preview{font-size:.85rem;color:var(--text-dim);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.req-approve-btn{margin-top:8px;width:100%;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);border-radius:3px;padding:6px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#4ade80;cursor:pointer;transition:all .2s;}
+.req-approve-btn:hover{background:rgba(37,211,102,.22);}
+
+/* CONFIRM LINK MODAL */
+.confirm-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:linear-gradient(160deg,#0d0a06,#110d07);border:1px solid rgba(201,168,76,.35);border-radius:6px;width:100%;max-width:400px;padding:28px 24px;text-align:center;animation:fadeInUp .25s ease;}
+.confirm-icon{font-size:2rem;margin-bottom:12px;}
+.confirm-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;}
+.confirm-url{font-size:.85rem;color:var(--text-dim);font-style:italic;word-break:break-all;margin-bottom:24px;padding:10px;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.1);border-radius:3px;}
+.confirm-btns{display:flex;gap:10px;justify-content:center;}
+.confirm-yes{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:4px;padding:8px 24px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);cursor:pointer;transition:all .2s;}
+.confirm-yes:hover{background:rgba(201,168,76,.28);}
+.confirm-no{background:rgba(139,26,26,.15);border:1px solid rgba(192,57,43,.3);border-radius:4px;padding:8px 24px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:#e07070;cursor:pointer;transition:all .2s;}
+.confirm-no:hover{background:rgba(139,26,26,.28);}
+
+/* DEV SETTINGS MODAL */
+.settings-modal{background:linear-gradient(160deg,#0d0a06,#110d07);border:1px solid rgba(201,168,76,.25);border-radius:6px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;position:relative;animation:fadeInUp .3s ease;}
+.settings-section{padding:16px 20px;border-bottom:1px solid rgba(201,168,76,.1);}
+.settings-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:10px;}
+.settings-input{width:100%;background:rgba(5,5,5,.7);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:10px 14px;color:var(--text);font-family:'Crimson Text',serif;font-size:.95rem;outline:none;transition:border-color .2s;margin-bottom:8px;}
+.settings-input:focus{border-color:rgba(201,168,76,.45);}
+.settings-save-btn{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:4px;padding:8px 20px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);cursor:pointer;transition:all .2s;}
+.settings-save-btn:hover{background:rgba(201,168,76,.28);}
+.settings-delete-btn{background:rgba(139,26,26,.15);border:1px solid rgba(192,57,43,.3);border-radius:4px;padding:6px 14px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;color:#e07070;cursor:pointer;transition:all .2s;margin-left:8px;}
+.settings-delete-btn:hover{background:rgba(139,26,26,.28);}
+.settings-toggle{display:flex;align-items:center;gap:12px;padding:10px 0;}
+.toggle-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text);}
+.toggle-switch{position:relative;width:48px;height:24px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;border-radius:24px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:2px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked + .toggle-slider{background:rgba(201,168,76,.3);border-color:var(--gold);}
+input:checked + .toggle-slider::before{transform:translateX(24px);background:var(--gold);}
+.avatar-preview{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;margin-bottom:8px;display:block;}
+
+/* PERATURAN MODAL */
+.rules-body{padding:20px 24px;max-height:60vh;overflow-y:auto;}
+.rules-body h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin:16px 0 8px;}
+.rules-body p,.rules-body li{font-size:.9rem;color:var(--text-dim);line-height:1.8;margin-bottom:6px;}
+.rules-body ul{padding-left:20px;}
+.rules-body ul li{list-style:disc;}
+
+@media(max-width:480px){.jasa-list{grid-template-columns:1fr}.hero-name{font-size:2rem}.user-name-small{display:none}}
+
+/* ── LOADING SCREEN ── */
+#loadingScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:#050505;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .8s ease, visibility .8s ease;
+}
+#loadingScreen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.ls-bg{position:absolute;inset:0;background-image:none;background-size:cover;background-position:center;filter:brightness(0.12) saturate(0.5);}
+.ls-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(201,168,76,.08) 0%,rgba(5,5,5,.95) 70%);}
+.ls-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;}
+.ls-skull{font-size:2.5rem;letter-spacing:16px;color:var(--gold-dark);opacity:.6;animation:sway 3s ease-in-out infinite;}
+.ls-logo{font-family:'Cinzel Decorative',serif;font-size:clamp(2.5rem,10vw,4rem);font-weight:900;color:var(--gold-light);letter-spacing:4px;text-shadow:0 0 60px rgba(201,168,76,.5),0 0 120px rgba(201,168,76,.2);animation:glimmer 2s ease-in-out infinite;}
+.ls-sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:6px;color:var(--gold-dark);text-transform:uppercase;opacity:.7;margin-top:-10px;}
+.ls-divider{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent);margin:4px 0;}
+.ls-bar-wrap{width:200px;height:2px;background:rgba(201,168,76,.12);border-radius:2px;overflow:hidden;margin-top:8px;}
+.ls-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold-dark));border-radius:2px;animation:loadBar 5s linear forwards;}
+@keyframes loadBar{0%{width:0%}100%{width:100%}}
+.ls-tagline{font-family:'Crimson Text',serif;font-style:italic;font-size:1rem;color:var(--text-dim);opacity:.5;margin-top:4px;letter-spacing:1px;}
+.ls-dots{display:flex;gap:8px;margin-top:4px;}
+.ls-dot{width:5px;height:5px;border-radius:50%;background:var(--gold-dark);opacity:.3;animation:dotPulse 1.2s ease-in-out infinite;}
+.ls-dot:nth-child(2){animation-delay:.2s;}
+.ls-dot:nth-child(3){animation-delay:.4s;}
+@keyframes dotPulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="ls-bg"></div>
+  <div class="ls-overlay"></div>
+  <div class="ls-content">
+    <div class="ls-skull">☽ ✦ ☾</div>
+    <div class="ls-logo">Vaera</div>
+    <div class="ls-sub">Community's</div>
+    <div class="ls-divider"></div>
+    <div class="ls-bar-wrap"><div class="ls-bar"></div></div>
+    <div class="ls-tagline">Berlayar bersama, berkarya tanpa batas.</div>
+    <div class="ls-dots">
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+      <div class="ls-dot"></div>
+    </div>
+  </div>
+</div>
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+<div class="noise"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="topbar-title">Vaera Community's</div>
+  <div class="topbar-actions">
+    <div id="authArea"></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-close" onclick="closeDrawer()">✕</div>
+  <div class="drawer-header">
+    <div class="drawer-header-icon">⚓</div>
+    <div class="drawer-header-title">Navigasi</div>
+  </div>
+  <div class="drawer-section">
+    <div class="drawer-section-label">Menu Utama</div>
+    <div class="drawer-item" onclick="openCS();closeDrawer()">
+      <div class="drawer-item-icon">&#x1F4AC;</div>
+      <div><div class="drawer-item-text">Customer Service</div><div class="drawer-item-sub">Hubungi developer</div></div>
+    </div>
+    <div class="drawer-item" onclick="openRules();closeDrawer()">
+      <div class="drawer-item-icon">&#x1F4CB;</div>
+      <div><div class="drawer-item-text">Peraturan</div><div class="drawer-item-sub">Rules &amp; Guidelines</div></div>
+    </div>
+    <div class="drawer-item" id="devSettingsBtn" style="display:none" onclick="openDevSettings();closeDrawer()">
+      <div class="drawer-item-icon">&#x2699;&#xFE0F;</div>
+      <div><div class="drawer-item-text">Developer Settings</div><div class="drawer-item-sub">Kelola profil &amp; jasa</div></div>
+    </div>
+  </div>
+  <div style="padding:20px;margin-top:auto;">
+    <div id="drawerAuthArea" style="margin-bottom:14px;"></div>
+    <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--text-dim);opacity:.4;text-align:center;">Vaera Community's · Est. 2025</div>
+  </div>
+</div>
+
+<!-- CS MODAL -->
+<div class="modal-overlay" id="csModal">
+  <div class="cs-modal">
+    <div class="cs-modal-header">
+      <span style="font-size:1.2rem">💬</span>
+      <div class="cs-modal-title">Customer Service</div>
+      <div id="csDevBadge" style="display:none"><span class="dev-badge">⚡ DEVELOPER</span></div>
+      <div class="cs-modal-close" onclick="closeCS()">✕</div>
+    </div>
+    <div id="csBody"></div>
+  </div>
+</div>
+
+<!-- RULES MODAL -->
+<div class="modal-overlay" id="rulesModal">
+  <div class="cs-modal">
+    <div class="cs-modal-header">
+      <span style="font-size:1.2rem">📋</span>
+      <div class="cs-modal-title">Rules & Guidelines</div>
+      <div class="cs-modal-close" onclick="closeRules()">✕</div>
+    </div>
+    <div class="rules-body">
+      <h3>⚓ General Rules</h3>
+      <ul>
+        <li>Respect all members and the developer at all times.</li>
+        <li>No harassment, hate speech, or discriminatory behavior.</li>
+        <li>Do not spam messages or flood the chat.</li>
+        <li>Keep discussions relevant and constructive.</li>
+      </ul>
+      <h3>⚔ Service Rules</h3>
+      <ul>
+        <li>All service requests must go through Customer Service.</li>
+        <li>Provide clear and detailed information about your request.</li>
+        <li>Payment is required before work begins.</li>
+        <li>No refunds after work has started unless agreed upon.</li>
+        <li>Delivery time depends on project complexity.</li>
+        <li>Revisions are limited to what was originally agreed.</li>
+      </ul>
+      <h3>🗺 Map & Build Rules</h3>
+      <ul>
+        <li>Do not claim ownership of work made by Vaera.</li>
+        <li>Do not redistribute or resell Vaera's work without permission.</li>
+        <li>Credit must be given when sharing publicly.</li>
+      </ul>
+      <h3>💬 Communication Rules</h3>
+      <ul>
+        <li>Be patient — the developer may not respond immediately.</li>
+        <li>Use appropriate language in all communications.</li>
+        <li>Do not demand urgent delivery without prior arrangement.</li>
+      </ul>
+      <p style="margin-top:16px;font-style:italic;opacity:.6;">Violation of these rules may result in service denial. Thank you for your cooperation. ✦</p>
+    </div>
+  </div>
+</div>
+
+<!-- DEV SETTINGS MODAL -->
+<div class="modal-overlay" id="devSettingsModal">
+  <div class="settings-modal">
+    <div class="cs-modal-header">
+      <span style="font-size:1.2rem">⚙️</span>
+      <div class="cs-modal-title">Developer Settings</div>
+      <div class="cs-modal-close" onclick="closeDevSettings()">✕</div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Profile Name</div>
+      <input class="settings-input" id="set-name" type="text" placeholder="Nama profil...">
+      <button class="settings-save-btn" onclick="saveSetting('name')">Simpan</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Handle / Username</div>
+      <input class="settings-input" id="set-handle" type="text" placeholder="@username">
+      <button class="settings-save-btn" onclick="saveSetting('handle')">Simpan</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Profile Photo URL</div>
+      <img id="set-avatar-preview" class="avatar-preview" src="" alt="preview">
+      <input class="settings-input" id="set-avatar" type="text" placeholder="https://...">
+      <button class="settings-save-btn" onclick="saveSetting('avatar')">Simpan</button>
+      <button class="settings-delete-btn" onclick="deleteSetting('avatar')">Reset Default</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Discord Server Link</div>
+      <input class="settings-input" id="set-discord-server" type="text" placeholder="https://discord.gg/...">
+      <button class="settings-save-btn" onclick="saveSetting('discordServer')">Simpan</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Discord Personal Link</div>
+      <input class="settings-input" id="set-discord-personal" type="text" placeholder="https://discord.gg/...">
+      <button class="settings-save-btn" onclick="saveSetting('discordPersonal')">Simpan</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Open / Close Jasa</div>
+      <div class="settings-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="set-jasa-open" onchange="saveJasaStatus()">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label" id="jasa-status-label">TUTUP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM LINK MODAL -->
+<div class="confirm-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-icon">🔗</div>
+    <div class="confirm-title">Are you sure you want to enter this link?</div>
+    <div class="confirm-url" id="confirmUrl"></div>
+    <div class="confirm-btns">
+      <button class="confirm-yes" onclick="confirmYes()">Yes, Continue</button>
+      <button class="confirm-no" onclick="confirmNo()">No, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="wrapper">
+  <div class="skull-deco animate delay-1">☽ ✦ ☾</div>
+
+  <div class="hero animate delay-1">
+    <div class="profile-frame">
+      <div class="compass-points">
+        <span class="cp n">N</span><span class="cp s">S</span><span class="cp e">E</span><span class="cp w">W</span>
+      </div>
+      <img class="profile-img" id="profileImg" src="https://drive.google.com/uc?export=view&id=1B_-eU1_YbafvAhjgXZAKLO4yO7wwOSR7" alt="CilXyn" onerror="this.onerror=null;this.src='https://placehold.co/160x160/1a1206/c9a84c?text=C';" style="background:#1a1206;">
+    </div>
+    <div class="hero-name" id="heroName">CILXYN STUDIOS</div>
+    <div class="hero-subtitle">Vaera Community's</div>
+    <div class="hero-handle" id="heroHandle">@cilxyn.id</div>
+    <div class="status-badge" id="statusBadge"><span class="status-dot" id="statusDot"></span> <span id="statusText">OPEN JASA — AKTIF</span></div>
+    <div class="tags-row" style="justify-content:center">
+      <span class="tag">Roblox</span>
+      <span class="tag">Map Builder</span>
+      <span class="tag">Community Owner</span>
+      <span class="tag">Content Creator</span>
+    </div>
+  </div>
+
+  <div class="divider animate delay-2"><div class="divider-line"></div><span class="divider-icon">⚔</span><div class="divider-line"></div></div>
+
+  <!-- ABOUT -->
+  <div class="section-card animate delay-2" id="about">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">📜</span><span class="section-title">Tentang Awak Kapal</span></div>
+    <div class="section-body">
+      <p class="about-text">Harta karun bukan di lautan, tapi di setiap <strong>kreasi</strong> yang kita bangun bersama. Vaera Community's adalah armada bajak laut digital — tempat para kreator, builder, dan gamer bersatu untuk mengarungi <strong>Roblox</strong> dan berbagi ilmu tanpa batas.</p>
+      <div class="stats-row">
+        <div class="stat-item"><span class="stat-number"><svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle"><g fill="none" stroke="#c9a84c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 36 C8 36 4 32 4 28 C4 22 9 18 14 20 L22 24"/><path d="M56 36 C56 36 60 32 60 28 C60 22 55 18 50 20 L42 24"/><path d="M22 24 L28 20 L36 20 L42 24"/><path d="M22 24 C20 26 19 29 20 32 L28 40 L36 40 L44 32 C45 29 44 26 42 24"/><path d="M20 32 L14 38 C12 40 12 43 14 45 C16 47 19 47 21 45 L22 44"/><path d="M44 32 L50 38 C52 40 52 43 50 45 C48 47 45 47 43 45 L42 44"/><path d="M22 44 C22 44 24 50 28 52 L36 52 C40 50 42 44 42 44"/><line x1="28" y1="40" x2="28" y2="52"/><line x1="36" y1="40" x2="36" y2="52"/></g></svg></span><span class="stat-label">Kepercayaan</span></div>
+        <div class="stat-item"><span class="stat-number">&#x269C;</span><span class="stat-label">Loyalitas</span></div>
+        <div class="stat-item"><span class="stat-number">&#x2694;</span><span class="stat-label">Tanggung Jawab</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPEN JASA -->
+  <div class="section-card jasa-card animate delay-3" id="jasa">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">⚔</span><span class="section-title">Open Jasa</span></div>
+    <div class="section-body">
+      <div class="jasa-badge" id="jasaBadge"><span class="status-dot" id="jasaDot"></span> <span id="jasaStatusText">BUKA SEKARANG</span></div>
+      <ul class="jasa-list">
+        <li>Create Maps</li><li>Redesign Maps</li>
+        <li>Upload Music</li><li>Create Systems</li>
+        <li>Fix Bugs</li><li>And More</li>
+      </ul>
+      <div class="jasa-note">✦ If you have any questions, feel free to contact Customer Service or chat directly with the developer using the number listed.</div>
+    </div>
+  </div>
+
+  <div class="divider animate delay-3"><div class="divider-line"></div><span class="divider-icon" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);white-space:nowrap">ALL CHANNEL</span><div class="divider-line"></div></div>
+
+  <!-- SOCIALS -->
+  <div class="section-card animate delay-4" id="sosmed">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">🏴‍☠️</span><span class="section-title">Sosial Media</span></div>
+    <div class="section-body">
+      <div class="link-btn discord" onclick="openLink('discord-personal')">
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path fill="#5865F2" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg></div>
+        <div class="link-info"><div class="link-name">Discord Personal</div><div class="link-desc">Akun Discord CilXyn</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+      <div class="link-btn tiktok" onclick="openLink('https://www.tiktok.com/@cilxyn.id?_r=1&_t=ZS-96fW1abbu9U')">
+        <div class="link-icon"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#010101" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/><path fill="#EE1D52" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" opacity="0.4"/><path fill="#69C9D0" d="M18.58 6.19a4.83 4.83 0 0 0 3.77 4.25v-.5a4.83 4.83 0 0 1-2.76-3.75h-1.01z" opacity="0.8"/></svg></div>
+        <div class="link-info"><div class="link-name">TikTok</div><div class="link-desc">@cilxyn.id</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+      <div class="link-btn whatsapp" onclick="openLink('https://wa.me/6282337707819')">
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.522 5.829L.051 23.947l6.293-1.499A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.869 9.869 0 01-5.031-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.861 9.861 0 012.118 12C2.118 6.545 6.545 2.118 12 2.118c5.456 0 9.882 4.427 9.882 9.882 0 5.456-4.426 9.882-9.882 9.882z"/></svg></div>
+        <div class="link-info"><div class="link-name">WhatsApp</div><div class="link-desc">+62 823-3770-7819</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVER -->
+  <div class="section-card animate delay-5" id="server">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">⚓</span><span class="section-title">Server Resmi Vaera</span></div>
+    <div class="section-body">
+      <div class="link-btn discord" onclick="openLink('discord-server')">
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path fill="#5865F2" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg></div>
+        <div class="link-info"><div class="link-name">Vaera Community's</div><div class="link-desc">Discord Server Resmi • Free to join</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WA CHANNELS -->
+  <div class="section-card animate delay-5" id="channels">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">📢</span><span class="section-title">ALL CHANNEL</span></div>
+    <div class="section-body">
+      <div class="link-btn whatsapp" onclick="openLink('https://whatsapp.com/channel/0029VbBtlIdH5JM5xFAtdv2k')">
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.522 5.829L.051 23.947l6.293-1.499A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.869 9.869 0 01-5.031-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.861 9.861 0 012.118 12C2.118 6.545 6.545 2.118 12 2.118c5.456 0 9.882 4.427 9.882 9.882 0 5.456-4.426 9.882-9.882 9.882z"/></svg></div>
+        <div class="link-info"><div class="link-name">VAERA PRIMAL LITE</div><div class="link-desc">Saluran utama Vaera Primal</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+      <div class="link-btn whatsapp" onclick="openLink('https://whatsapp.com/channel/0029VbCT7mADuMRcz7IJXx2U')">
+        <div class="link-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.522 5.829L.051 23.947l6.293-1.499A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.869 9.869 0 01-5.031-1.378l-.361-.214-3.741.981.999-3.648-.235-.374A9.861 9.861 0 012.118 12C2.118 6.545 6.545 2.118 12 2.118c5.456 0 9.882 4.427 9.882 9.882 0 5.456-4.426 9.882-9.882 9.882z"/></svg></div>
+        <div class="link-info"><div class="link-name">VAERA PRIMAL MUSIC</div><div class="link-desc">Saluran Vaera Primal Music</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT -->
+  <div class="section-card animate delay-5" id="payment">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">💳</span><span class="section-title">Payment</span></div>
+    <div class="section-body">
+      <div class="payment-trigger-btn" onclick="openPayment()">
+        <span class="payment-trigger-icon">⚓</span>
+        <div>
+          <div class="payment-trigger-text">SCAN TO PAY</div>
+          <div class="payment-trigger-sub">GoPay · Klik untuk lihat QR & info pembayaran</div>
+        </div>
+        <span style="color:var(--gold);font-size:1.1rem;margin-left:auto">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div class="payment-modal-overlay" id="paymentModal" onclick="handlePaymentOverlayClick(event)">
+    <div class="payment-modal-scroll">
+      <div class="payment-modal-inner">
+        <div style="font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold-light);letter-spacing:3px;text-align:center;margin-bottom:14px;padding-top:8px;">⚓ PAYMENT CILXYN STUDIOS ⚓</div>
+        <div class="payment-img-frame">
+          <span class="payment-corner-deco tl">✦</span>
+          <span class="payment-corner-deco tr">✦</span>
+          <span class="payment-corner-deco bl">✦</span>
+          <span class="payment-corner-deco br">✦</span>
+          <img class="payment-img" id="paymentImg" src="https://drive.google.com/uc?export=view&id=1ZCw_t3Bu9k2bpDM_MQDeppoRWkf1gheD" alt="Payment CilXyn Studios">
+        </div>
+        <div class="payment-info-row">
+          <button class="payment-download-btn" onclick="downloadPayment()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Payment Image
+          </button>
+          <div class="payment-info-card">
+            <div>
+              <div class="payment-info-label">Nomor GoPay</div>
+              <div class="payment-info-value" id="gopayNumber">082337707819</div>
+            </div>
+            <button class="payment-copy-btn" id="copyGopayBtn" onclick="copyGopay()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Salin
+            </button>
+          </div>
+          <div class="payment-info-card">
+            <div>
+              <div class="payment-info-label">Nama GoPay</div>
+              <div class="payment-info-value">CilXyn</div>
+            </div>
+          </div>
+          <div class="payment-tips-card">
+            <div class="payment-tips-header">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Tips &amp; Payment Rules
+            </div>
+            <ul class="payment-tips-list">
+              <li>&#x2694; Double-check the GoPay name before transferring — make sure it says <strong>CilXyn</strong>.</li>
+              <li>&#x2694; Read the GoPay number carefully: <strong>082337707819</strong>. Any transfer mistake is your own responsibility.</li>
+              <li>&#x2694; We are NOT responsible for incorrect transfers. The payment info we provide is accurate.</li>
+              <li>&#x2694; Orders cannot be refunded or returned under any circumstances.</li>
+              <li>&#x2694; Attempting to force a refund or chargeback will result in a <strong>permanent blacklist</strong> from CilXyn Studios with no compensation.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="payment-banner">✦ GoPay Only · Konfirmasi setelah transfer ✦</div>
+      </div>
+    </div>
+    <div class="payment-close-bar">
+      <button class="payment-close-bar-btn" onclick="closePayment()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        TUTUP
+      </button>
+    </div>
+  </div>
+
+  <!-- DONATE -->
+  <div class="section-card animate delay-6" id="donate">
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+    <div class="section-header"><span class="section-header-icon">💰</span><span class="section-title">Dukung Awak Kapal</span></div>
+    <div class="section-body">
+      <p style="font-size:.95rem;color:var(--text-dim);font-style:italic;margin-bottom:14px;">Setiap dukunganmu membantu kami terus berlayar dan berkarya. Harta kecil dari bajak laut yang baik hati ✦</p>
+      <div class="link-btn saweria" onclick="openLink('https://saweria.co/Vinszx')">
+        <div class="link-icon" style="background:rgba(255,160,50,.1);border-color:rgba(255,160,50,.3)"><span style="font-size:1.3rem">🪙</span></div>
+        <div class="link-info"><div class="link-name">Saweria</div><div class="link-desc">saweria.co/Vinszx — Donate di sini!</div></div>
+        <span class="link-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider animate delay-7"><div class="divider-line"></div><span class="divider-icon">☠</span><div class="divider-line"></div></div>
+
+  <div class="footer animate delay-7">
+    <div class="footer-emblem">Vaera</div>
+    <div class="footer-text">⚓ Community's · Est. 2025 ⚓</div>
+    <div class="footer-copy">Berlayar bersama, berkarya tanpa batas.</div>
+  </div>
+</div>
+
+<script>
+const DEVELOPER_EMAIL = 'ucuppondok30@gmail.com';
+const GOOGLE_CLIENT_ID = '984957966756-vibgt8arsh57sq02hkbgtau0533d3d9p.apps.googleusercontent.com';
+const DEFAULT_AVATAR = 'https://drive.google.com/uc?export=view&id=1B_-eU1_YbafvAhjgXZAKLO4yO7wwOSR7';
+const DEFAULT_DISCORD_SERVER = 'https://discord.gg/UJZRETpWQ';
+const DEFAULT_DISCORD_PERSONAL = 'https://discord.gg/XyZ7b9QG';
+
+let currentUser = null;
+let isDeveloper = false;
+let csOpen = false;
+let devTab = 'requests';
+let activeConvId = null;
+let pendingUrl = null;
+
+// ── STORAGE (Persistent — shared across all servers) ──
+const _cache = {};
+async function getStorageAsync(key, def=null){
+  if(_cache[key] !== undefined) return _cache[key];
+  try {
+    const r = await window.storage.get(key, true);
+    const val = r ? JSON.parse(r.value) : def;
+    _cache[key] = val;
+    return val;
+  } catch { return def; }
+}
+async function setStorageAsync(key, val){
+  _cache[key] = val;
+  try { await window.storage.set(key, JSON.stringify(val), true); } catch(e){ console.error('storage err',e); }
+}
+// Sync wrappers (use cache; async init loads from server)
+function getStorage(key,def=null){ return (_cache[key]!==undefined)?_cache[key]:def; }
+function setStorage(key,val){ _cache[key]=val; setStorageAsync(key,val); }
+function getDevSettings(){return getStorage('vaera_dev_settings',{});}
+function saveDevSettings(s){setStorage('vaera_dev_settings',s);}
+function getConvs(){return getStorage('vaera_convs',{});}
+function saveConvs(c){setStorage('vaera_convs',c);}
+// Pre-load from shared persistent storage on page load
+async function initStorage(){
+  const [devS, convS] = await Promise.all([
+    getStorageAsync('vaera_dev_settings',{}),
+    getStorageAsync('vaera_convs',{})
+  ]);
+  _cache['vaera_dev_settings'] = devS;
+  _cache['vaera_convs'] = convS;
+}
+
+// ── APPLY DEV SETTINGS ──
+function applyDevSettings(){
+  const s = getDevSettings();
+  document.getElementById('heroName').textContent = s.name || 'CILXYN STUDIOS';
+  if(s.handle) document.getElementById('heroHandle').textContent = s.handle;
+  const avatar = s.avatar || DEFAULT_AVATAR;
+  const img = document.getElementById('profileImg');
+  img.setAttribute('referrerpolicy','no-referrer');
+  img.src = avatar;
+  applyJasaStatus(s.jasaOpen !== false);
+}
+
+function applyJasaStatus(isOpen){
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  const badge = document.getElementById('statusBadge');
+  const jasaDot = document.getElementById('jasaDot');
+  const jasaText = document.getElementById('jasaStatusText');
+  const jasaBadge = document.getElementById('jasaBadge');
+  if(isOpen){
+    dot.className='status-dot open';
+    text.textContent='OPEN JASA \u2014 AKTIF';
+    badge.classList.remove('closed');
+    jasaDot.className='status-dot open';
+    jasaText.textContent='BUKA SEKARANG';
+    jasaBadge.classList.remove('closed');
+  } else {
+    dot.className='status-dot closed';
+    text.textContent='JASA TUTUP';
+    badge.classList.add('closed');
+    jasaDot.className='status-dot closed';
+    jasaText.textContent='TUTUP SEMENTARA';
+    jasaBadge.classList.add('closed');
+  }
+}
+
+// ── DRAWER ──
+function toggleDrawer(){
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('drawerOverlay').classList.toggle('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
+
+// ── CONFIRM LINK ──
+function openLink(url){
+  if(url === 'discord-server'){
+    const s = getDevSettings();
+    url = s.discordServer || DEFAULT_DISCORD_SERVER;
+  } else if(url === 'discord-personal'){
+    const s = getDevSettings();
+    url = s.discordPersonal || DEFAULT_DISCORD_PERSONAL;
+  }
+  pendingUrl = url;
+  document.getElementById('confirmUrl').textContent = url;
+  document.getElementById('confirmModal').classList.add('open');
+}
+function confirmYes(){
+  document.getElementById('confirmModal').classList.remove('open');
+  if(pendingUrl) window.open(pendingUrl,'_blank');
+  pendingUrl = null;
+}
+function confirmNo(){
+  document.getElementById('confirmModal').classList.remove('open');
+  pendingUrl = null;
+}
+
+// ── GOOGLE AUTH ──
+function initGoogleAuth(){
+  window.google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleLogin,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+  renderAuthArea();
+}
+
+function renderAuthArea(){
+  const area = document.getElementById('authArea');
+  const drawerArea = document.getElementById('drawerAuthArea');
+  var G_SVG_SM = '<svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>';
+  if(currentUser){
+    area.innerHTML = `
+      <img src="${currentUser.picture}" class="user-avatar" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+      <span class="user-name-small">${currentUser.given_name||currentUser.name.split(' ')[0]}</span>
+      <button class="login-btn" onclick="logoutUser()" style="padding:4px 10px;font-size:8px">Logout</button>
+    `;
+    if(drawerArea) drawerArea.innerHTML = `<div class="drawer-auth">
+      <div class="drawer-auth-user">
+        <img src="${currentUser.picture}" class="user-avatar" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+        <span class="drawer-auth-name">${currentUser.name}</span>
+        ${isDeveloper?'<span class="dev-badge" style="font-size:7px">DEV</span>':''}
+      </div>
+      <div style="font-family:Crimson Text,serif;font-style:italic;font-size:11px;color:var(--text-dim)">${currentUser.email}</div>
+      <button class="drawer-logout-btn" onclick="logoutUser()">✕ Logout</button>
+    </div>`;
+    if(isDeveloper) document.getElementById('devSettingsBtn').style.display='flex';
+  } else {
+    area.innerHTML = `<button class="login-btn" onclick="doGoogleLogin()" style="display:flex;align-items:center;gap:6px;">${G_SVG_SM}Login</button>`;
+    if(drawerArea) drawerArea.innerHTML = `<div class="drawer-auth">
+      <div style="font-family:Cinzel,serif;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-align:center;margin-bottom:8px">Login untuk akses fitur</div>
+      <button class="drawer-login-btn" id="drawer-google-btn">${G_SVG_SM} Sign in with Google</button>
+    </div>`;
+    // Attach event after render
+    setTimeout(function(){
+      var dbtn = document.getElementById('drawer-google-btn');
+      if(dbtn) dbtn.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        closeDrawer();
+        setTimeout(doGoogleLogin, 200);
+      });
+    }, 0);
+    document.getElementById('devSettingsBtn').style.display='none';
+  }
+}
+
+function doGoogleLogin(){
+  if(window.google && window.google.accounts && window.google.accounts.id){
+    // Try One Tap first
+    window.google.accounts.id.prompt(function(notification){
+      if(notification.isNotDisplayed() || notification.isSkippedMoment()){
+        // One Tap not available — show rendered button in topbar area
+        var area = document.getElementById('authArea');
+        area.innerHTML = '<div id="g_id_topbar" style="margin:0"></div>';
+        window.google.accounts.id.renderButton(
+          document.getElementById('g_id_topbar'),
+          {theme:'outline', size:'small', text:'signin', shape:'rectangular'}
+        );
+      }
+    });
+  } else {
+    alert('Google SDK belum siap. Coba refresh halaman.');
+  }
+}
+function csGoogleLogin(){
+  // Show rendered Google button inside CS modal (keeps modal open)
+  var rendered = document.getElementById('cs-google-rendered');
+  var origBtn = document.getElementById('cs-google-btn');
+  if(origBtn) origBtn.style.display = 'none';
+  if(rendered){
+    rendered.style.display = 'flex';
+    rendered.innerHTML = '';
+    if(window.google && window.google.accounts && window.google.accounts.id){
+      window.google.accounts.id.renderButton(rendered, {
+        theme: 'outline', size: 'large', text: 'signin_with', shape: 'rectangular',
+        width: 240
+      });
+      // Also trigger One Tap prompt
+      window.google.accounts.id.prompt(function(notification){
+        if(notification.isNotDisplayed() || notification.isSkippedMoment()){
+          // One tap not available, use rendered button only
+        }
+      });
+    } else {
+      rendered.innerHTML = '<span style="color:#e07070;font-size:11px;font-family:Cinzel,serif">Google SDK belum siap. Coba refresh halaman.</span>';
+    }
+  }
+}
+
+// ── NOTIFICATIONS ──
+function showNotif(msg, type){
+  type = type || 'info';
+  var existing = document.getElementById('vaera-notif');
+  if(existing) existing.remove();
+  var colors = {
+    info: {bg:'rgba(201,168,76,.18)', border:'rgba(201,168,76,.5)', color:'var(--gold-light)'},
+    success: {bg:'rgba(37,211,102,.15)', border:'rgba(37,211,102,.4)', color:'#4ade80'},
+    error: {bg:'rgba(139,26,26,.2)', border:'rgba(192,57,43,.4)', color:'#e07070'},
+  };
+  var c = colors[type] || colors.info;
+  var notif = document.createElement('div');
+  notif.id = 'vaera-notif';
+  notif.style.cssText = [
+    'position:fixed','bottom:80px','left:50%','transform:translateX(-50%) translateY(20px)',
+    'z-index:9000','padding:12px 24px','border-radius:4px',
+    'background:'+c.bg,'border:1px solid '+c.border,'color:'+c.color,
+    'font-family:Cinzel,serif','font-size:10px','letter-spacing:2px',
+    'backdrop-filter:blur(8px)','box-shadow:0 4px 24px rgba(0,0,0,.5)',
+    'opacity:0','transition:all .35s cubic-bezier(.4,0,.2,1)',
+    'max-width:90vw','text-align:center','pointer-events:none'
+  ].join(';');
+  notif.textContent = msg;
+  document.body.appendChild(notif);
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      notif.style.opacity = '1';
+      notif.style.transform = 'translateX(-50%) translateY(0)';
+    });
+  });
+  setTimeout(function(){
+    notif.style.opacity = '0';
+    notif.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(function(){ if(notif.parentNode) notif.remove(); }, 400);
+  }, 3500);
+}
+
+
+
+function triggerGoogleLogin(){
+  if(window.google && window.google.accounts && window.google.accounts.id){
+    window.google.accounts.id.prompt();
+  } else {
+    // Fallback: show Google One Tap manually via rendered button
+    const area = document.getElementById('authArea');
+    area.innerHTML = `<div id="g_id_signin" style="margin:0"></div>`;
+    if(window.google && window.google.accounts){
+      window.google.accounts.id.renderButton(document.getElementById('g_id_signin'),{theme:'outline',size:'small',text:'signin'});
+    } else {
+      alert('Google Login sedang dimuat, coba beberapa saat lagi.');
+    }
+  }
+}
+
+function handleGoogleLogin(response){
+  const payload = parseJwt(response.credential);
+  currentUser = {name:payload.name,given_name:payload.given_name,email:payload.email,picture:payload.picture,sub:payload.sub};
+  isDeveloper = (currentUser.email === DEVELOPER_EMAIL);
+  try { localStorage.setItem('vaera_user', JSON.stringify(currentUser)); } catch(e){}
+  renderAuthArea();
+  showNotif('⚓ Welcome, ' + (currentUser.given_name||currentUser.name) + '!', 'success');
+  if(csOpen) renderCSBody();
+  if(window._afterLoginOpenCS){ window._afterLoginOpenCS = false; openCS(); }
+}
+
+function logoutUser(){
+  var name = currentUser ? (currentUser.given_name||currentUser.name) : '';
+  currentUser=null;isDeveloper=false;
+  try { localStorage.removeItem('vaera_user'); } catch(e){}
+  renderAuthArea();
+  if(name) showNotif('Sampai jumpa, ' + name + '!', 'info');
+  if(csOpen) renderCSBody();
+}
+
+function restoreLogin(){
+  try {
+    const saved = localStorage.getItem('vaera_user');
+    if(saved){ currentUser = JSON.parse(saved); isDeveloper = (currentUser.email === DEVELOPER_EMAIL); }
+  } catch(e){}
+}
+
+function parseJwt(token){
+  const base64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  return JSON.parse(atob(base64));
+}
+
+// ── CS ──
+function openCS(){csOpen=true;document.getElementById('csModal').classList.add('open');renderCSBody();}
+function closeCS(){csOpen=false;document.getElementById('csModal').classList.remove('open');}
+
+function renderCSBody(){
+  const devBadge=document.getElementById('csDevBadge');
+  devBadge.style.display=isDeveloper?'block':'none';
+  if(isDeveloper) renderDevCS(); else renderUserCS();
+}
+
+function renderUserCS(){
+  const body=document.getElementById('csBody');
+  if(!currentUser){
+    var G_SVG = '<svg width="16" height="16" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>';
+    body.innerHTML = '<div class="cs-login-prompt">'
+      + '<p>&#x2693; Untuk menghubungi Customer Service,<br>silakan login dengan akun Google terlebih dahulu.</p>'
+      + '<button id="cs-google-btn" style="display:inline-flex;align-items:center;gap:10px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:4px;padding:11px 22px;font-size:14px;font-weight:500;cursor:pointer;font-family:Roboto,Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.15);margin-bottom:4px;">'
+      + G_SVG + 'Sign in with Google</button>'
+      + '<div id="cs-google-rendered" style="display:none;margin:8px auto;justify-content:center"></div>'
+      + '<p style="margin-top:8px;font-size:9px;opacity:.5">Login bersifat opsional &amp; aman</p>'
+      + '<button onclick="closeCS()" style="display:block;margin:14px auto 0;background:rgba(139,26,26,.15);border:1px solid rgba(192,57,43,.3);border-radius:4px;font-family:Cinzel,serif;font-size:9px;letter-spacing:2px;color:#e07070;cursor:pointer;padding:7px 20px;">✕ Tutup</button>'
+      + '</div>';
+    // Attach event AFTER render
+    setTimeout(function(){
+      var btn = document.getElementById('cs-google-btn');
+      if(btn) btn.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        csGoogleLogin();
+      });
+    }, 0);
+    return;
+  }
+  const uid=currentUser.sub;
+  const convs=getConvs();
+  const conv=convs[uid]||{user:currentUser,approved:false,messages:[]};
+  const hasSentFirstMsg=conv.messages.some(m=>m.role==='user');
+  const isApproved=conv.approved;
+  const canSend=!hasSentFirstMsg||isApproved;
+  let msgsHtml=conv.messages.map(m=>buildMsgHtml(m)).join('');
+  body.innerHTML=`
+    <div class="cs-chat-area" id="chatArea">${msgsHtml||'<div style="text-align:center;padding:32px;font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;color:var(--text-dim)">⚓ Mulai percakapan...</div>'}</div>
+    ${!canSend?`<div class="cs-locked-notice">🔒 Pesan sudah terkirim. Menunggu developer menyetujui...</div>`:''}
+    <div class="cs-input-area">
+      <textarea class="cs-input" id="csInput" placeholder="${canSend?'Tulis pesanmu...':'Menunggu persetujuan developer...'}" ${canSend?'':'disabled'}></textarea>
+      <button class="cs-send" id="csSendBtn" onclick="sendUserMsg()" ${canSend?'':'disabled'}>➤</button>
+    </div>`;
+  scrollChat();
+}
+
+function buildMsgHtml(m){
+  const time=m.time?new Date(m.time).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'';
+  if(m.role==='bot') return `<div class="msg bot"><div class="msg-sender">🤖 Bot</div><div class="msg-bubble">${escHtml(m.text)}</div><div class="msg-meta">${time}</div></div>`;
+  if(m.role==='dev') return `<div class="msg other"><div class="msg-sender">⚡ Developer</div><div class="msg-bubble">${escHtml(m.text)}</div><div class="msg-meta">${time}</div></div>`;
+  return `<div class="msg me"><div class="msg-bubble">${escHtml(m.text)}</div><div class="msg-meta">${m.sender||'Kamu'} · ${time}</div></div>`;
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function sendUserMsg(){
+  if(!currentUser)return;
+  const input=document.getElementById('csInput');
+  const text=input.value.trim();if(!text)return;
+  const uid=currentUser.sub;
+  const convs=getConvs();
+  if(!convs[uid])convs[uid]={user:currentUser,approved:false,messages:[]};
+  const now=Date.now();
+  convs[uid].messages.push({role:'user',text,time:now,sender:currentUser.given_name||currentUser.name});
+  const isFirst=convs[uid].messages.filter(m=>m.role==='user').length===1;
+  if(isFirst) convs[uid].messages.push({role:'bot',text:'You can only send one message until the developer approves it.',time:now+500});
+  saveConvs(convs);input.value='';renderUserCS();
+}
+
+function scrollChat(){setTimeout(()=>{const a=document.getElementById('chatArea');if(a)a.scrollTop=a.scrollHeight;},50);}
+
+function renderDevCS(){
+  const body=document.getElementById('csBody');
+  const convs=getConvs();
+  const keys=Object.keys(convs);
+  if(devTab==='requests'||!activeConvId){
+    if(keys.length===0){body.innerHTML=`<div style="padding:32px;text-align:center;font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;color:var(--text-dim)">⚓ Belum ada pesan masuk</div>`;return;}
+    let listHtml=keys.map(uid=>{
+      const c=convs[uid];const lastMsg=c.messages.filter(m=>m.role==='user').slice(-1)[0];const approved=c.approved;
+      return `<div class="req-item ${approved?'approved':''}" onclick="devOpenConv('${uid}')">
+        <div class="req-item-header"><img class="req-avatar" src="${c.user.picture||''}" onerror="this.style.display='none'"><span class="req-name">${escHtml(c.user.name||c.user.email)}</span><span class="req-status ${approved?'approved':'pending'}">${approved?'APPROVED':'PENDING'}</span></div>
+        <div class="req-preview">${lastMsg?escHtml(lastMsg.text):'(tidak ada pesan)'}</div>
+        ${!approved?`<button class="req-approve-btn" onclick="event.stopPropagation();approveConv('${uid}')">✓ Setujui</button>`:''}
+      </div>`;
+    }).join('');
+    body.innerHTML=`<div class="cs-requests-list">${listHtml}</div>`;
+  } else {
+    const conv=convs[activeConvId];if(!conv){devTab='requests';activeConvId=null;renderDevCS();return;}
+    let msgsHtml=conv.messages.map(m=>buildMsgHtml(m)).join('');
+    body.innerHTML=`
+      <div style="padding:8px 16px;border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:center;gap:8px;">
+        <button onclick="devBack()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:1rem;">←</button>
+        <img src="${conv.user.picture||''}" class="req-avatar" onerror="this.style.display='none'">
+        <span style="font-family:Cinzel,serif;font-size:10px;color:var(--gold)">${escHtml(conv.user.name)}</span>
+        ${conv.approved?'<span class="req-status approved" style="margin-left:auto">APPROVED</span>':`<button class="req-approve-btn" style="margin-left:auto;width:auto;padding:3px 10px" onclick="approveConv('${activeConvId}')">✓ Setujui</button>`}
+      </div>
+      <div class="cs-chat-area" id="chatArea">${msgsHtml}</div>
+      <div class="cs-input-area">
+        <textarea class="cs-input" id="csInput" placeholder="Balas sebagai Developer..."></textarea>
+        <button class="cs-send" onclick="sendDevMsg()">➤</button>
+      </div>`;
+    scrollChat();
+  }
+}
+
+function devOpenConv(uid){activeConvId=uid;devTab='chat';renderDevCS();}
+function devBack(){activeConvId=null;devTab='requests';renderDevCS();}
+function approveConv(uid){const convs=getConvs();if(convs[uid])convs[uid].approved=true;saveConvs(convs);renderDevCS();}
+function sendDevMsg(){
+  const input=document.getElementById('csInput');const text=input.value.trim();
+  if(!text||!activeConvId)return;
+  const convs=getConvs();
+  convs[activeConvId].messages.push({role:'dev',text,time:Date.now(),sender:'Developer'});
+  saveConvs(convs);input.value='';renderDevCS();
+}
+
+// ── RULES ──
+function openRules(){document.getElementById('rulesModal').classList.add('open');}
+function closeRules(){document.getElementById('rulesModal').classList.remove('open');}
+
+// ── DEV SETTINGS ──
+function openDevSettings(){
+  if(!isDeveloper)return;
+  const s=getDevSettings();
+  document.getElementById('set-name').value=s.name||'';
+  document.getElementById('set-handle').value=s.handle||'';
+  document.getElementById('set-avatar').value=s.avatar||'';
+  document.getElementById('set-avatar-preview').src=s.avatar||DEFAULT_AVATAR;
+  document.getElementById('set-discord-server').value=s.discordServer||'';
+  document.getElementById('set-discord-personal').value=s.discordPersonal||'';
+  const jasaOpen=s.jasaOpen!==false;
+  document.getElementById('set-jasa-open').checked=jasaOpen;
+  document.getElementById('jasa-status-label').textContent=jasaOpen?'BUKA':'TUTUP';
+  document.getElementById('devSettingsModal').classList.add('open');
+}
+function closeDevSettings(){document.getElementById('devSettingsModal').classList.remove('open');}
+
+function saveSetting(key){
+  const s=getDevSettings();
+  const inputMap={name:'set-name',handle:'set-handle',avatar:'set-avatar',discordServer:'set-discord-server',discordPersonal:'set-discord-personal'};
+  const val=document.getElementById(inputMap[key]).value.trim();
+  s[key]=val;
+  saveDevSettings(s);
+  if(key==='avatar'){
+    const src=val||DEFAULT_AVATAR;
+    document.getElementById('set-avatar-preview').src=src;
+  }
+  applyDevSettings();
+  alert('✓ Tersimpan!');
+}
+
+function deleteSetting(key){
+  const s=getDevSettings();
+  delete s[key];
+  saveDevSettings(s);
+  if(key==='avatar'){
+    document.getElementById('set-avatar').value='';
+    document.getElementById('set-avatar-preview').src=DEFAULT_AVATAR;
+  }
+  applyDevSettings();
+}
+
+function saveJasaStatus(){
+  const s=getDevSettings();
+  const isOpen=document.getElementById('set-jasa-open').checked;
+  s.jasaOpen=isOpen;
+  saveDevSettings(s);
+  document.getElementById('jasa-status-label').textContent=isOpen?'BUKA':'TUTUP';
+  applyJasaStatus(isOpen);
+}
+
+
+// ── PAYMENT ──
+function handlePaymentOverlayClick(e){
+  if(e.target === document.getElementById('paymentModal')) closePayment();
+}
+function openPayment(){document.getElementById('paymentModal').classList.add('open');document.body.style.overflow='hidden';}
+function downloadPayment(){
+  var img = document.getElementById('paymentImg');
+  if(!img || !img.src){ alert('Gambar belum tersedia.'); return; }
+  // Try fetch blob download first (works for same-origin or CORS-enabled)
+  fetch(img.src)
+    .then(function(r){ return r.blob(); })
+    .then(function(blob){
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Payment_CilXyn_Studios.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    })
+    .catch(function(){
+      // Fallback: draw to canvas and download
+      try {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || img.width || 400;
+        canvas.height = img.naturalHeight || img.height || 400;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = 'Payment_CilXyn_Studios.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch(e) {
+        // Last resort: open in new tab
+        window.open(img.src, '_blank');
+        showNotif('Gambar dibuka di tab baru. Tekan & tahan untuk menyimpan.', 'info');
+      }
+    });
+}
+function closePayment(){document.getElementById('paymentModal').classList.remove('open');document.body.style.overflow='';}
+function copyGopay(){
+  var num = document.getElementById('gopayNumber').textContent;
+  var COPY_HTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Salin';
+  var CHECK_HTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Tersalin!';
+  function setCopied(btn){ btn.classList.add('copied'); btn.innerHTML = CHECK_HTML; showNotif('✓ Nomor GoPay berhasil disalin!', 'success'); setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = COPY_HTML; }, 2000); }
+  var btn = document.getElementById('copyGopayBtn');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(num).then(function(){ setCopied(btn); }).catch(function(){ fallbackCopy(num, btn, CHECK_HTML, COPY_HTML); });
+  } else { fallbackCopy(num, btn, CHECK_HTML, COPY_HTML); }
+}
+function fallbackCopy(num, btn, CHECK_HTML, COPY_HTML){
+  var ta = document.createElement('textarea'); ta.value = num;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+  btn.classList.add('copied'); btn.innerHTML = CHECK_HTML;
+  setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = COPY_HTML; }, 2000);
+}
+
+// ── PARALLAX ──
+window.addEventListener('scroll',()=>{
+  document.querySelector('.bg-layer').style.transform=`translateY(${window.scrollY*.15}px)`;
+});
+
+// ── RIPPLE ──
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.link-btn');if(!btn)return;
+  const ripple=document.createElement('span');
+  ripple.style.cssText=`position:absolute;border-radius:50%;width:80px;height:80px;background:rgba(201,168,76,.15);left:${e.offsetX-40}px;top:${e.offsetY-40}px;transform:scale(0);animation:ripple .5s ease-out forwards;pointer-events:none;`;
+  btn.appendChild(ripple);setTimeout(()=>ripple.remove(),500);
+});
+const rs=document.createElement('style');rs.textContent=`@keyframes ripple{to{transform:scale(3);opacity:0}}`;document.head.appendChild(rs);
+
+// ── LOADING SCREEN ──
+setTimeout(()=>{
+  const ls = document.getElementById('loadingScreen');
+  if(ls) ls.classList.add('hidden');
+  setTimeout(()=>{if(ls) ls.remove();}, 900);
+}, 5000);
+
+// ── INIT ──
+window.addEventListener('load',async ()=>{
+  restoreLogin();
+  await initStorage();
+  applyDevSettings();
+  if(window.google&&window.google.accounts){
+    initGoogleAuth();
+  } else {
+    const s=document.querySelector('script[src*="gsi"]');
+    if(s) s.addEventListener('load',initGoogleAuth);
+  }
+});
+</script>
+</body>
+</html>
